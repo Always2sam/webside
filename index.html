@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Royal Spices</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Logo & Judul */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: #d4af37; /* Warna Emas */
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p.tagline {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            color: #ccc;
+        }
+
+        /* Info Restoran */
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .address {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .cs-badge {
+            background-color: #d4af37;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Testimoni */
+        .testimonial {
+            font-style: italic;
+            margin: 20px 0;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .customer-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
+            margin-top: 10px;
+        }
+
+        /* Tombol Continue */
+        .btn-continue {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .btn-continue:hover {
+            background: #d4af37;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Royal Spices</h1>
+        <p class="tagline">Taste the Elegance</p>
+
+        <div class="info-card">
+            <p class="address">📍 Jl. Jendral Sudirman No. 88, Jakarta Selatan</p>
+            <div class="cs-badge">⭐ 5-Star Customer Service</div>
+            <p>📞 CS: 0812-9999-8888 (24 Jam)</p>
+            
+            <hr style="border-color: rgba(255,255,255,0.2); margin: 15px 0;">
+
+            <div class="testimonial">
+                "Pengalaman makan malam terbaik yang pernah saya rasakan. Pelayanannya luar biasa ramah!"
+                <br>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Customer" class="customer-img">
+                <br>
+                <small>- Bapak Hartono, Pelanggan Setia</small>
+            </div>
+        </div>
+
+        <a href="home.html" class="btn-continue">Continue &rarr;</a>
+    </div>
+
+</body>
+</html>
