@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Spices - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --gold: #d4af37;
+            --dark: #1a1a1a;
+            --light: #f4f4f4;
+            --dark-gray: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--light);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 26, 26, 0.95);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .logo {
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-attachment: fixed; /* Parallax Effect */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: slideUp 1s forwards 0.5s;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideUp 1s forwards 0.8s;
+        }
+
+        .btn-gold {
+            padding: 15px 35px;
+            background-color: var(--gold);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+            opacity: 0;
+            animation: slideUp 1s forwards 1.1s;
+            display: inline-block;
+        }
+
+        .btn-gold:hover {
+            background-color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* --- SECTIONS GENERAL --- */
+        section {
+            padding: 80px 10%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .section-title span {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        /* --- MENU HIGHLIGHTS --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.4s ease;
+            opacity: 0; /* Hidden for JS animation */
+            transform: translateY(30px);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .menu-img {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .menu-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .menu-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-section {
+            background-color: var(--dark);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            color: var(--gold);
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .about-img {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: -20px 20px 0 var(--gold);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #111;
+            color: #777;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Class untuk JS Trigger */
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 1s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Royal Spices</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#about">About</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Exquisite Dining</h1>
+            <p>Rasakan kemewahan cita rasa nusantara dalam balutan modern.</p>
+            <a href="#menu" class="btn-gold">Lihat Menu</a>
+        </div>
+    </header>
+
+    <section id="menu">
+        <div class="section-title reveal">
+            <span>Special Selection</span>
+            <h2>Menu Favorit</h2>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-card reveal">
+                <div class="menu-img" style="background-image: url('https://images.unsplash.com/photo-1546241072-48010ad2862c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="menu-info">
+                    <h3>Wagyu Satay</h3>
+                    <p>Sate Wagyu A5 dengan bumbu kacang mede spesial.</p>
+                    <br>
+                    <span class="price">IDR 250k</span>
+                </div>
+            </div>
+            <div class="menu-card reveal">
+                <div class="menu-img" style="background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="menu-info">
+                    <h3>Nasi Goreng Truffle</h3>
+                    <p>Nasi goreng rempah dengan topping jamur truffle hitam.</p>
+                    <br>
+                    <span class="price">IDR 180k</span>
+                </div>
+            </div>
+            <div class="menu-card reveal">
+                <div class="menu-img" style="background-image: url('https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="menu-info">
+                    <h3>Steak Rendang</h3>
+                    <p>Tenderloin steak yang dimasak dengan bumbu rendang 24 jam.</p>
+                    <br>
+                    <span class="price">IDR 320k</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="about-img reveal">
+            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Chef">
+        </div>
+        <div class="about-text reveal">
+            <h2>The Chef's Story</h2>
+            <p>"Kami percaya bahwa makanan bukan hanya soal rasa, tapi sebuah seni yang menyatukan hati. Di Royal Spices, setiap piring disiapkan dengan cinta dan presisi tingkat tinggi untuk memuaskan jiwa kuliner Anda."</p>
+            <br>
+            <a href="#" class="btn-gold" style="background:transparent; border:1px solid #d4af37; color:#d4af37;">Read More</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Royal Spices Restaurant. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', reveal);
+
+        function reveal(){
+            var reveals = document.querySelectorAll('.reveal');
+
+            for(var i = 0; i < reveals.length; i++){
+                var windowHeight = window.innerHeight;
+                var revealTop = reveals[i].getBoundingClientRect().top;
+                var revealPoint = 150;
+
+                if(revealTop < windowHeight - revealPoint){
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
