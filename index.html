@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JG FAMILY - Premium Gastronomy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,500&family=Plus+Jakarta+Sans:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --white: #ffffff;
+            --black: #050505;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            animation: kenburns 20s infinite alternate;
+        }
+
+        @keyframes kenburns {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.9) 100%);
+        }
+
+        .landing-content {
+            text-align: center;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease forwards 0.5s;
+        }
+
+        .sub-title {
+            color: var(--gold);
+            letter-spacing: 10px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .main-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 12vw, 6.5rem);
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 50px;
+        }
+
+        .main-title span { color: var(--gold); font-style: italic; }
+
+        /* --- MODERN ROUNDED RECTANGLE BUTTON --- */
+        .btn-explore {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 60px;
+            background: transparent;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 100px; /* Persegi panjang tidak lancip */
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-explore:hover {
+            color: #000;
+            border-color: var(--gold);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-explore::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--gold);
+            z-index: -1;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-explore:hover::before {
+            left: 0;
+        }
+
+        /* --- LOADER --- */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .loader-overlay.active { visibility: visible; opacity: 1; }
+
+        .loader-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .progress-container {
+            width: 250px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            position: absolute;
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.8s ease;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-container">
+        <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1920&q=80" class="bg-image">
+        <div class="overlay"></div>
+    </div>
+
+    <div class="landing-content" id="landingContent">
+        <p class="sub-title">ESTABLISHED 2026</p>
+        <h1 class="main-title">JG <span>FAMILY</span></h1>
+        
+        <button class="btn-explore" onclick="startJourney()">
+            Explore Taste
+        </button>
+    </div>
+
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-text"><span id="counter">0</span>%</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        function startJourney() {
+            const landingContent = document.getElementById('landingContent');
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            
+            landingContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                loaderOverlay.classList.add('active');
+                
+                // Sequence: 0 - 10 - 40 - 70 - 100
+                setTimeout(() => { update(10); }, 400);
+                setTimeout(() => { update(40); }, 1200);
+                setTimeout(() => { update(70); }, 2000);
+                setTimeout(() => { update(100); }, 2800);
+                setTimeout(() => { window.location.href = 'home.html'; }, 3500);
+            }, 500);
+        }
+
+        function update(percent) {
+            document.getElementById('counter').innerText = percent;
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+    </script>
+</body>
+</html>
