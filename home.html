@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Taste - Ultimate Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --white: #ffffff;
+            --glass-black: rgba(0, 0, 0, 0.85);
+            --smooth-curve: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #050505;
+            color: var(--white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND --- */
+        .fixed-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* --- NAV --- */
+        nav {
+            padding: 25px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            z-index: 100;
+        }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); font-weight: bold; text-decoration: none; letter-spacing: 2px; }
+        .btn-nav {
+            text-decoration: none; color: white; border: 1px solid rgba(212,175,55,0.3);
+            padding: 10px 25px; border-radius: 50px; font-size: 0.75rem; font-weight: 600;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        .btn-nav:hover { background: var(--gold); color: black; border-color: var(--gold); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 35vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 8vw, 4.5rem); font-style: italic; }
+        .hero p { color: var(--gold); letter-spacing: 5px; text-transform: uppercase; font-size: 0.75rem; margin-top: 5px; }
+
+        /* --- STICKY SEARCH --- */
+        .search-area {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .search-area.is-sticky {
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .search-box {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            padding: 5px 25px;
+            transition: 0.3s;
+        }
+        .search-box:focus-within { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.15); }
+        .search-box input { background: transparent; border: none; color: white; padding: 12px; width: 100%; font-size: 0.95rem; }
+        .search-box i { color: var(--gold); }
+
+        /* --- MENU LIST --- */
+        .container { padding: 20px 10% 80px; min-height: 60vh; }
+        .menu-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .menu-strip {
+            background: var(--glass-black);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s var(--smooth-curve);
+            overflow: hidden;
+            position: relative;
+        }
+        .menu-strip:hover { border-color: rgba(212, 175, 55, 0.6); transform: translateX(5px); }
+
+        .strip-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            gap: 20px;
+            min-height: 90px;
+        }
+
+        .strip-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .strip-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* Font Size Clamp Logic */
+        .strip-body h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            color: #eee;
+        }
+
+        .price-sub {
+            color: var(--gold);
+            font-size: 1rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* --- ACCORDION ANIMATION --- */
+        .description-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s var(--smooth-curve);
+        }
+
+        .menu-strip.active { background: rgba(10, 10, 10, 0.95); border-color: var(--gold); }
+        .menu-strip.active .description-wrapper { grid-template-rows: 1fr; }
+
+        .description-content { overflow: hidden; }
+        
+        .description-inner {
+            padding: 0 25px 30px 25px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.4s ease;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: 20px;
+        }
+        .menu-strip.active .description-inner { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+
+        .full-desc { color: #aaa; line-height: 1.7; font-size: 0.9rem; margin-bottom: 20px; max-width: 90%; }
+
+        .btn-wa {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px;
+            background: transparent;
+            color: var(--gold);
+            text-decoration: none;
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            font-weight: 600; font-size: 0.75rem; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .btn-wa:hover { background: var(--gold); color: black; }
+
+        /* --- BUSINESS FOOTER STRIP --- */
+        .business-footer {
+            background: #000;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 40px 0;
+            margin-top: auto; /* Push to bottom */
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-strip {
+            display: flex;
+            justify-content: space-evenly; /* Spread evenly */
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+        }
+
+        .footer-item .label {
+            color: var(--gold);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .footer-item .value {
+            color: #ccc;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-divider {
+            width: 1px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .strip-header { padding: 12px 15px; }
+            .strip-img { width: 55px; height: 55px; }
+            
+            /* Footer Stack on Mobile */
+            .footer-strip { flex-direction: column; text-align: center; gap: 30px; }
+            .footer-item { align-items: center; }
+            .footer-divider { width: 50px; height: 1px; background: rgba(255,255,255,0.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-bg"></div>
+
+    <nav>
+        <a href="#" class="logo">ROYAL</a>
+        <a href="index.html" class="btn-nav">BACK TO HOME</a>
+    </nav>
+
+    <header class="hero">
+        <p>The Masterpiece Collection</p>
+        <h1>Full Menu Gallery</h1>
+    </header>
+
+    <div class="search-area" id="searchArea">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Cari menu spesial...">
+        </div>
+    </div>
+
+    <section class="container">
+        <div class="menu-list" id="menuList">
+            
+            <div class="menu-strip" data-name="Miyazaki Wagyu Ribeye A5 Luxury Gold">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1546241072-48010ad2862c?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Miyazaki Wagyu Ribeye A5 Luxury Gold</h3>
+                        <div class="price-sub">IDR 1.450k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper">
+                    <div class="description-content">
+                        <div class="description-inner">
+                            <p class="full-desc">Daging sapi A5 Miyazaki dari Jepang dengan marbling skor 12. Dipanggang perlahan di atas arang Binchotan untuk menghasilkan tekstur lumer. Disajikan dengan saus Red Wine Bordeaux 24 jam dan hiasan emas edible 24 karat.</p>
+                            <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-strip" data-name="Rock Lobster Linguine Bisque">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Rock Lobster Linguine Bisque</h3>
+                        <div class="price-sub">IDR 580k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper">
+                    <div class="description-content">
+                        <div class="description-inner">
+                            <p class="full-desc">Pasta linguine buatan tangan dipadukan dengan lobster batu segar 300gr. Saus bisque kental dibuat dari sari kepala lobster panggang, menciptakan aroma laut yang mendalam dan gurih elegan.</p>
+                            <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-strip" data-name="Wild Black Truffle Mushroom Soup">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Wild Black Truffle Mushroom Soup</h3>
+                        <div class="price-sub">IDR 125k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Perpaduan tiga jenis jamur liar (Portobello, Shiitake, Porcini) menjadi krim sup selembut sutra. Diperkaya minyak Black Truffle Italia dan disajikan dengan Garlic Brioche renyah.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Pan-Seared Atlantic Salmon">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Pan-Seared Atlantic Salmon</h3>
+                        <div class="price-sub">IDR 320k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Salmon Atlantik liar dipanggang dengan teknik pan-seared untuk kulit super renyah dan daging lembut. Disajikan di atas asparagus hijau dengan saus Hollandaise lemon butter.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Australian Prime Lamb Rack">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1544022613-e87dd7498454?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Australian Prime Lamb Rack</h3>
+                        <div class="price-sub">IDR 450k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Iga domba Australia premium dimarinasi Rosemary dan Thyme selama 12 jam. Dipanggang medium, disajikan dengan Puree Kentang Truffle dan Mint Jelly sauce.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Classic French Duck Confit">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1514516348920-f5d90e4871e0?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Classic French Duck Confit</h3>
+                        <div class="price-sub">IDR 285k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Hidangan klasik Perancis. Paha bebek dimasak perlahan (slow-cooked) dalam lemaknya sendiri selama 8 jam hingga daging lepas dari tulang. Disajikan dengan saus jeruk Bigarade.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Royal Beluga Caviar with Egg">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Royal Beluga Caviar with Egg</h3>
+                        <div class="price-sub">IDR 950k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Appetizer ultra-mewah. Telur organik sous-vide lembut dengan topping Royal Beluga Caviar langka. Ledakan rasa asin elegan kaviar berpadu dengan creamy kuning telur.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Imperial Wagyu Beef Sando">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1528739194764-1522e430af92?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Imperial Wagyu Beef Sando</h3>
+                        <div class="price-sub">IDR 620k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Sandwich Jepang dengan roti Shokupan panggang mentega. Diisi potongan tebal Wagyu A5 goreng tepung (katsu) dan saus Tonkatsu rahasia. Lemak wagyu mencair di mulut.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Hokkaido Scallop Carpaccio">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Hokkaido Scallop Carpaccio</h3>
+                        <div class="price-sub">IDR 245k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Irisan tipis Scallop segar Hokkaido. Diberi percikan Yuzu Vinaigrette, Extra Virgin Olive Oil, dan Sea Salt untuk menonjolkan rasa manis alami kerang.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Truffle Parmesan Gold Fries">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Truffle Parmesan Gold Fries</h3>
+                        <div class="price-sub">IDR 85k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Kentang goreng premium golden-crispy, diaduk dengan minyak truffle putih asli dan taburan keju Parmesan melimpah. Camilan aromatik kelas atas.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Valrhona Dark Chocolate Soufflé">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Valrhona Dark Chocolate Soufflé</h3>
+                        <div class="price-sub">IDR 195k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Dessert signature menggunakan cokelat Valrhona 70%. Dipanggang teknik tinggi hingga mengembang namun tetap cair di tengah. Disajikan panas dengan es krim Vanilla Madagaskar.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Japanese Yuzu Cheesecake">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Japanese Yuzu Cheesecake</h3>
+                        <div class="price-sub">IDR 145k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Cheesecake panggang gaya Jepang bertekstur mousse ringan. Infused dengan sari jeruk Yuzu Jepang yang memberikan kesegaran asam unik sebagai penutup hidangan.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+            <div class="menu-strip" data-name="Grilled King Prawn Garlic">
+                <div class="strip-header">
+                    <img src="https://images.unsplash.com/photo-1559742811-822873691df0?auto=format&fit=crop&w=200" class="strip-img">
+                    <div class="strip-body">
+                        <h3>Grilled King Prawn Garlic</h3>
+                        <div class="price-sub">IDR 380k</div>
+                    </div>
+                </div>
+                <div class="description-wrapper"><div class="description-content"><div class="description-inner">
+                    <p class="full-desc">Udang raja XL dibelah dan dibakar di atas bara api. Disiram saus Garlic Butter dan rempah Italia. Daging kenyal manis dengan aroma smoky yang kuat.</p>
+                    <a href="#" class="btn-wa">ORDER VIA WHATSAPP</a>
+                </div></div></div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="business-footer">
+        <div class="footer-strip">
+            <div class="footer-item">
+                <span class="label">LOCATION</span>
+                <span class="value">Senopati, South Jakarta, ID</span>
+            </div>
+            
+            <div class="footer-divider"></div>
+            
+            <div class="footer-item">
+                <span class="label">INQUIRIES</span>
+                <span class="value">admin@jgfamily.com</span>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-item">
+                <span class="label">WHATSAPP</span>
+                <span class="value">+62 812 9999 0000</span>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-item">
+                <span class="label">RESERVED</span>
+                <span class="value">© 2026 JGFAMILY CORPS</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. STICKY SEARCH BAR LOGIC
+        const searchArea = document.getElementById('searchArea');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                searchArea.classList.add('is-sticky');
+            } else {
+                searchArea.classList.remove('is-sticky');
+            }
+        });
+
+        // 2. ACCORDION LOGIC
+        const strips = document.querySelectorAll('.menu-strip');
+        strips.forEach(strip => {
+            strip.addEventListener('click', (e) => {
+                // Mencegah trigger jika klik tombol WA
+                if(e.target.closest('.btn-wa')) return;
+
+                const isActive = strip.classList.contains('active');
+                
+                // Tutup semua yang lain
+                strips.forEach(s => s.classList.remove('active'));
+                
+                // Buka yang diklik
+                if (!isActive) {
+                    strip.classList.add('active');
+                    // Scroll smooth biar pas di tengah
+                    setTimeout(() => {
+                        strip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 400);
+                }
+            });
+        });
+
+        // 3. SEARCH FILTER LOGIC
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            strips.forEach(strip => {
+                const name = strip.getAttribute('data-name').toLowerCase();
+                if(name.includes(val)) {
+                    strip.style.display = "block";
+                } else {
+                    strip.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
